@@ -23,7 +23,7 @@ inline long double f(long double x) {
 }
 
 inline long double f_s(long double x) {
-  return (a1*x+b1)*x + c1;
+  return (a1*x+b1)*x+c1;
 }
 
 long double sqrt1(long double x) {
@@ -42,13 +42,16 @@ long double sqrt1(long double x) {
 inline vector <long double> solve_f_s() {
   // printf("%.8Lf %.8Lf %.8Lf\n", a1, b1, c1);
   auto k = a1;
-  // a1/=k, b1/=k, c1/=k;
+  a1/=k, b1/=k, c1/=k;
   long double disk = b1*b1 - 4*a1*c1;
   if (disk < -EPS) {
     return {};
   }
-  long double x2 = (-b1 + sqrt(abs(disk))) / (2 * a1);
-  long double x3 = (-b1 - sqrt(abs(disk))) / (2 * a1);
+  long double x2 = (-b1 + sqrt(abs(disk))) / (2);
+  if (abs(disk) < 1e-6  ) {
+    return {x2};
+  }
+  long double x3 = (-b1 - sqrt(abs(disk))) / (2);
   return {x2, x3};
 }
 
@@ -150,7 +153,7 @@ int main() {
   vector <long double> roots = solve_f_s();
   roots.push_back(x1);
   print_roots(roots);
-  printf("%.10Lf %.10Lf\n", f(4.9998474), f(5.0001526));
+  // printf("%.10Lf %.10Lf\n", f(4.9998474), f(5.0001526));
   return 0;
 }
 
