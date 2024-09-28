@@ -14,27 +14,31 @@ const double EPS = 1e-9;
 using namespace std;
 
 
-bool dfs(int start, vector <vector <int>>& adj_lst, vector <int>& color, int flag) {
-  color[start] = flag + 1;
+bool dfs(int start, vector <vector <int>>& adj_lst, vector <int>& color, vector <int>& ans) {
+  color[start] = 1;
   for (auto vert : adj_lst[start]) {
-    if (color[vert] == color[start]) {
+    if (color[vert] == 1) {
       return false;
     }
     if (color[vert] == 0) {
-      if (!dfs(vert, adj_lst, color, (flag + 1) % 2)) {
+      if (!dfs(vert, adj_lst, color, ans)) {
         return false;
       }
     }
   }
+  ans.push_back(start);
+  color[start] = 2;
   return true;
 }
+
 
 int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 
-  // freopen("banket.in", "r", stdin);
-  // freopen("banket.out", "w", stdout);
+  // freopen("postroenie.in", "r", stdin);
+  // freopen("postroenie.out", "w", stdout);
+
   int n, m;
   cin >> n >> m;
   vector <vector <int>> adj_lst(n);
@@ -43,22 +47,21 @@ int main() {
     cin >> s >> f;
     --s, --f;
     adj_lst[s].push_back(f);
-    adj_lst[f].push_back(s);
   }
   vector <int> color(n, 0);
+  vector <int> ans;
+  
   for (int i = 0; i < n; ++i) {
     if (color[i] == 0) {
-      if (!dfs(i, adj_lst, color, 0)) {
-        cout << "NO" << endl;
+      if (!dfs(i, adj_lst, color, ans)) {
+        cout << "No" << endl;
         return 0;
       }
     }
   }
-  cout << "YES" << endl;
-  for (int i = 0; i < n; ++i) {
-    if (color[i] == 1) {
-      cout << i + 1 << ' ';
-    }
+  cout << "Yes" << endl;
+  for (int i = int(ans.size()) - 1; i > -1; --i) {
+    cout << ans[i] + 1 << ' ';
   }
   cout << endl;
   return 0;
